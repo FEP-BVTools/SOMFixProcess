@@ -1,0 +1,9 @@
+dir,FileName,SOMType,Why
+/bv/System,UndueParam.bin,all,未到期參數
+/bv/System,Black.bin,new,黑名單_非所有業者適用
+/bv,cacert.pem,new,
+/bv,EventOnlineInfo.txt,new,即時傳輸資料
+/bv,Revenue.bin,new,結班累積金額
+/bv,tmpEzc,new,
+/bv,tmpKrtc,new,
+/bv,UUPayOnlinePoint.bin,new,
