@@ -1,7 +1,7 @@
 from FTPwork import myFtp
 from  SerialTest import SerialCtrl
 import time
-
+import winsound
 #運行流程
 #-----------------------------------
 
@@ -11,8 +11,14 @@ import time
 
 #------------------------------------
 
+#系統音設置
+duration = 500  # millisecond
+freq = 880  # Hz
+
+
 ActionList=['run 1','CheckIsDone','CheckAble','run 2','CheckIsDone','CheckAble','Reset',
-             'CheckAble2','LoadingTLS','untar','CheckAble','RemoveTar']
+             'CheckAble2','LoadingTLS','untar','CheckAble','RemoveTar','Reboot','CheckWorking',
+            'StopProcess','SetIP']
 CheckAction=['WriteListCheck']
 #ActionList=['SetIP','LoadingTLS','untar','CheckAble','RemoveTar']
 ActionFlag=0
@@ -66,12 +72,20 @@ def SOMAction(case,DebugInfo):
         if DebugInfo.find('/ #')!= -1:
             return 1
 
+    elif case=='CheckWorking':
+        if DebugInfo.find('Local IP=')!= -1:
+            return 1
+
     elif case=='run 2':
         ser.SerialWrite("run 2\r\n".encode())
         return 1
 
     elif case == 'Reset':
         ser.SerialWrite("reset\r\n".encode())
+        return 1
+
+    elif case == 'Reboot':
+        ser.SerialWrite("reboot -f\r\n".encode())
         return 1
 
     elif case=='LoadingTLS':
@@ -82,7 +96,7 @@ def SOMAction(case,DebugInfo):
             print("FTP Fail")
             return 4
 
-    elif case == 'Kill':
+    elif case == 'StopProcess':
         ser.SerialWrite("killall Mitac_BV\r\n".encode())
         return 1
 
@@ -97,11 +111,11 @@ def SOMAction(case,DebugInfo):
 
     elif case=="RemoveTar":
         ser.SerialWrite("rm openssl.tar.gz\r\n".encode())
-        return 2
+        return 1
 
     elif case=="SetIP":
         ser.SerialWrite("ifconfig eth0 192.168.0.50 up \r\n".encode())
-        return 1
+        return 2
 
 
 
@@ -119,12 +133,11 @@ if __name__ == "__main__":
         except:
             print("有異常字元~~~")
         print('|',end='')
+
+
         try:
 
             if SOMAction(ActionList[ActionFlag],Debugdata)==1:
-
-
-
                 print('-------------------------------------------')
                 print('NowAction:', ActionList[ActionFlag])
                 print('ActionFlag:', ActionFlag)
@@ -138,7 +151,6 @@ if __name__ == "__main__":
                 TimeoutCounter=0
 
             elif SOMAction(ActionList[ActionFlag],Debugdata)==2:
-
                 print(StepTimeList)
                 EntreTime=0
                 for x in StepTimeList:
@@ -147,9 +159,9 @@ if __name__ == "__main__":
                 StepTimeList.clear()
                 ActionFlag = 0
                 TimeoutCounter = 0
-                time.sleep(10)
+                # time.sleep(10)
+                winsound.Beep(freq, duration)
                 a = input("流程完成,請更換下一片")
-
             elif SOMAction(ActionList[ActionFlag], Debugdata) == 3:
                 print(Debugdata)
                 print("SOM板異常!")

@@ -1,5 +1,6 @@
 from __future__ import print_function
 import ftplib
+import ftputil
 import os
 from os.path import isfile, isdir
 
@@ -213,8 +214,45 @@ class myFtp:
     
     def CheckRountsFileName(self):
         RemoteNames = self.ftp.nlst()        
-        print("伺服端文件目錄：", RemoteNames)
+        #print("伺服端文件目錄：", RemoteNames)
         return RemoteNames
     
     def close(self):
         self.ftp.quit()
+
+    def DeleteFuc(self, TargetFileName):
+        #確認為資料夾或是檔案
+        #資料夾:
+        #進入後取得清單
+
+
+        try:
+            self.ftp.cwd(TargetFileName)
+        except:
+            print("資料夾不存在!")
+        finally:
+            print('{},刪除完成'.format(TargetFileName))
+
+        RemoteFileNames = self.ftp.nlst()
+        if len(RemoteFileNames) > 0:
+            for SentencedFile in RemoteFileNames:
+                self.ftp.delete(SentencedFile)
+                print('已刪除{}\n'.format(SentencedFile))
+        else:
+            print("資料夾無檔案!\n")
+    def DeleteFolder(self, dirname):
+        self.ftp.rmd(dirname)
+
+    def DeleteFile(self, filename):
+        self.ftp.rmd(filename)
+
+
+if __name__ == "__main__":
+    ftp = myFtp("192.168.0.50")
+    ftp.Login("root", "")
+    ftp.ChangeRount('/bv/InBox')
+    print(ftp.CheckRountsFileName())
+
+    ftp.DeleteFolder("EZC")
+    print(ftp.CheckRountsFileName())
+    ftp.close()
