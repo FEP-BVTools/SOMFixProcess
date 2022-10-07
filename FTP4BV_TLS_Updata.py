@@ -15,10 +15,15 @@ import winsound
 duration = 500  # millisecond
 freq = 880  # Hz
 
+#全套
+# ActionList=['run 1','CheckIsDone','CheckAble','run 2','CheckIsDone','CheckAble','Reset',
+#              'CheckAble2','LoadingTLS','untar','CheckAble','RemoveTar','Reboot','CheckWorking',
+#             'StopProcess','SetIP']
 
-ActionList=['run 1','CheckIsDone','CheckAble','run 2','CheckIsDone','CheckAble','Reset',
-             'CheckAble2','LoadingTLS','untar','CheckAble','RemoveTar','Reboot','CheckWorking',
-            'StopProcess','SetIP']
+#刪資料用
+ActionList=['CheckWorking','RemoveTransferd','CheckAble','StopProcess','SetIP']
+
+
 CheckAction=['WriteListCheck']
 #ActionList=['SetIP','LoadingTLS','untar','CheckAble','RemoveTar']
 ActionFlag=0
@@ -57,8 +62,6 @@ def SOMAction(case,DebugInfo):
             return 1
         elif DebugInfo.find('ARP Retry') != -1:
             return 3
-    # elif case=='WriteListCheck':
-
 
     elif case=='CheckIsDone':
         if DebugInfo.find('done')!= -1:
@@ -168,7 +171,9 @@ if __name__ == "__main__":
                 ActionFlag = 0
                 TimeoutCounter = 0
             elif SOMAction(ActionList[ActionFlag], Debugdata) == 4:
+                winsound.Beep(freq, duration)
                 a=input("重試")
+
 
         except:
             SerialCtrl.SerialClose()

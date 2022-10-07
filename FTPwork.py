@@ -1,6 +1,5 @@
 from __future__ import print_function
 import ftplib
-import ftputil
 import os
 from os.path import isfile, isdir
 
@@ -171,9 +170,9 @@ class myFtp:
                           self.RetryCount=self.RetryTimes 
                           break
                       except:                          
-                          f=open("ErrReport.csv","a")
-                          f.write("{},UpLoadFail\n".format(fullpath))
-                          f.close()                          
+                          # f=open("ErrReport.csv","a")
+                          # f.write("{},UpLoadFail\n".format(fullpath))
+                          # f.close()
                           
                           print("Retry Upload")
                           self.RetryCount-=1
