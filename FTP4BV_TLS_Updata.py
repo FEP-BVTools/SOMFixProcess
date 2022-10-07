@@ -16,12 +16,12 @@ duration = 500  # millisecond
 freq = 880  # Hz
 
 #全套
-# ActionList=['run 1','CheckIsDone','CheckAble','run 2','CheckIsDone','CheckAble','Reset',
-#              'CheckAble2','LoadingTLS','untar','CheckAble','RemoveTar','Reboot','CheckWorking',
-#             'StopProcess','SetIP']
+ActionList=['run 1','CheckIsDone','CheckAble','run 2','CheckIsDone','CheckAble','Reset',
+             'CheckAble2','LoadingTLS','untar','CheckAble','RemoveTar','Reboot','CheckWorking',
+            'StopProcess','SetIP']
 
 #刪資料用
-ActionList=['CheckWorking','RemoveTransferd','CheckAble','StopProcess','SetIP']
+# ActionList=['CheckWorking','RemoveTransferd','CheckAble','StopProcess','SetIP']
 
 
 CheckAction=['WriteListCheck']

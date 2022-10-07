@@ -37,22 +37,24 @@ def SOMDataCheckProcess():
             if SOMType == 'new':
                 # 不進行篩選,只要存在於黑名單的就刪除
                 for BlackListFileName in BlackListdf[BlackListdf['Dir'] == BlackPath]['FileName']:
-                    print('{}存在資料:{}!!!'.format(BlackPath, BlackListFileName))
-                    # 刪除黑名單檔案
-                    try:
-                        ftp.DeleteFuc(BlackListFileName)
-                    except:
-                        print('刪除失敗!')
+                    if BlackListFileName in GrayFileCheck[BlackPath]:
+                        print('{}存在資料:{}!!!'.format(BlackPath, BlackListFileName))
+                        # 刪除黑名單檔案
+                        try:
+                            ftp.DeleteFuc(BlackListFileName)
+                        except:
+                            print('刪除失敗!')
             elif SOMType == 'repair':
                 # 只刪除必要刪的檔案
                 for BlackListFileName in \
                 BlackListdf[(BlackListdf['Dir'] == BlackPath) & (BlackListdf['SOMType'] == 'all')]['FileName']:
-                    print('{}存在資料:{}!!!'.format(BlackPath, BlackListFileName))
-                    # 刪除黑名單檔案
-                    try:
-                        ftp.DeleteFuc(BlackListFileName)
-                    except:
-                        print('刪除失敗!')
+                    if BlackListFileName in GrayFileCheck[BlackPath]:
+                        print('{}存在資料:{}!!!'.format(BlackPath, BlackListFileName))
+                        # 刪除黑名單檔案
+                        try:
+                            ftp.DeleteFuc(BlackListFileName)
+                        except:
+                            print('刪除失敗!')
             else:
                 print('SOMDataBlackTypeErr!!!!')
 
