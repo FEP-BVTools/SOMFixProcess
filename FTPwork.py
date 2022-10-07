@@ -219,31 +219,35 @@ class myFtp:
     def close(self):
         self.ftp.quit()
 
-    def DeleteFuc(self, TargetFileName):
-        #確認為資料夾或是檔案
-        #資料夾:
-        #進入後取得清單
 
-
-        try:
-            self.ftp.cwd(TargetFileName)
-        except:
-            print("資料夾不存在!")
-        finally:
-            print('{},刪除完成'.format(TargetFileName))
-
+    def DeleteFuc(self, TargetName):
+        #待處理:以LIST指令判別檔案類型
+        #取得目前位置清單,並確認有該資料
         RemoteFileNames = self.ftp.nlst()
-        if len(RemoteFileNames) > 0:
-            for SentencedFile in RemoteFileNames:
-                self.ftp.delete(SentencedFile)
-                print('已刪除{}\n'.format(SentencedFile))
-        else:
-            print("資料夾無檔案!\n")
-    def DeleteFolder(self, dirname):
-        self.ftp.rmd(dirname)
+        if TargetName in RemoteFileNames:
+            #確認為資料夾或是檔案
 
-    def DeleteFile(self, filename):
-        self.ftp.rmd(filename)
+            # 資料夾:
+            try:
+                #嘗試進入目標,確認其為資料夾
+                self.ftp.cwd(TargetName)#/a #[d,f] #[]
+                print('目前資料夾:',TargetName)
+                #取得目標資料夾清單
+                RemoteFileNames = self.ftp.nlst()#[b,c]
+                #如資料夾內有東西
+                if len(RemoteFileNames)>0:
+                    for NextTarget in RemoteFileNames:
+                        self.DeleteFuc(NextTarget)
+                    self.ftp.cwd('..')
+                    self.ftp.rmd(TargetName)
+                else:
+                    #回到上一層,刪除該目錄
+                    self.ftp.cwd('..')
+                    self.ftp.rmd(TargetName)
+            #檔案:
+            except:
+                self.ftp.delete(TargetName)
+
 
 
 if __name__ == "__main__":
